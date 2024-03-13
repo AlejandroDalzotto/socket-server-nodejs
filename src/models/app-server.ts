@@ -2,7 +2,7 @@ import express, { type Application } from 'express'
 import cors from 'cors'
 import database from '@/database/connection'
 
-export default class AppServer {
+export class AppServer {
   app: Application
   port: string
   paths: Record<string, string>

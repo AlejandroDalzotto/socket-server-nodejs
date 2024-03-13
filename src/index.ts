@@ -1,5 +1,5 @@
-import AppServer from '@/models/app-server'
 import dotenv from 'dotenv'
+import { AppServer } from './models'
 
 dotenv.config()
 
