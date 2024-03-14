@@ -1,8 +1,12 @@
 import { DataTypes } from 'sequelize'
-import database from '@/database/connection'
+import database from '../database/connection'
 
 export const User = database.define('User', {
-  name: {
+  uuid: {
+    type: DataTypes.UUID,
+    primaryKey: true
+  },
+  username: {
     type: DataTypes.STRING({ length: 18 }),
     allowNull: false
   },
