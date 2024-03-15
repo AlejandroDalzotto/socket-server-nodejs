@@ -1,7 +1,7 @@
 import express, { type Application } from 'express'
 import cors from 'cors'
-import { authRouter } from '../routes'
-// import database from '@/database/connection'
+import { authRouter } from '@/routes'
+import database from '@/database/connection'
 
 export class AppServer {
   app: Application
@@ -18,7 +18,7 @@ export class AppServer {
       auth: '/api/auth'
     }
 
-    // void this.database()
+    void this.database()
     this.middlewares()
     this.routes()
   }
@@ -29,13 +29,13 @@ export class AppServer {
   }
 
   // Connection to database.
-  // private async database (): Promise<void> {
-  //   try {
-  //     await database.sync({ alter: true })
-  //   } catch (error) {
-  //     console.error('Unable to connect to the database:', error)
-  //   }
-  // }
+  private async database (): Promise<void> {
+    try {
+      await database.sync({ alter: true })
+    } catch (error) {
+      console.error('Unable to connect to the database:', error)
+    }
+  }
 
   // Define middlewares for express.
   private middlewares (): void {
