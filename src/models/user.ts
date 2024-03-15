@@ -25,6 +25,6 @@ export const User = database.define('User', {
     allowNull: false
   }
 }, {
-  timestamps: false,
+  timestamps: true,
   tableName: 'users'
 })
