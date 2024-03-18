@@ -102,6 +102,7 @@
   },
   "include": [
     "./src/*",
+    "./src/*.d.ts",
     "./src/**/*.ts"
   ],
   "exclude": [

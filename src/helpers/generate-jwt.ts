@@ -1,12 +1,14 @@
 import jwt from 'jsonwebtoken'
 import { User } from '@/models'
+import type { UUID } from '@/types'
 
-export const generateJWT = async (uid: any): Promise<string> => {
+export const generateJWT = async (uuid: UUID): Promise<string> => {
   return await new Promise((resolve, reject) => {
-    const payload = { uid }
+    const payload = { uuid }
     const secret = process.env.SECRET_KEY as string
     jwt.sign(payload, secret, {
-      expiresIn: '1d'
+      expiresIn: '1d',
+      algorithm: 'HS384'
     }, (error, token) => {
       if (error !== null) {
         return reject(error.message)
@@ -22,11 +24,11 @@ export const checkJWT = async (token = ''): Promise<any> => {
     if (token === null || token === undefined) {
       throw new Error('401: Unauthorized or missing token')
     }
-    const { uid } = jwt.verify(token, process.env.SECRET_KEY as string) as { uid: string }
+    const { uuid } = jwt.verify(token, process.env.SECRET_KEY as string) as { uuid: UUID }
     const user = await User.findOne({
       where: {
-        id: uid,
-        state: true
+        uuid,
+        active: true
       }
     })
 

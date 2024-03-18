@@ -1,7 +1,16 @@
-import { DataTypes } from 'sequelize'
+import { DataTypes, Model } from 'sequelize'
 import database from '../database/connection'
+import type { UUID } from '@/types'
 
-export const User = database.define('User', {
+export class User extends Model {
+  declare uuid: UUID
+  declare username: string
+  declare email: string
+  declare password: string
+  declare active: boolean
+}
+
+User.init({
   uuid: {
     type: DataTypes.UUID,
     primaryKey: true
@@ -25,6 +34,8 @@ export const User = database.define('User', {
     allowNull: false
   }
 }, {
+  sequelize: database,
+  tableName: 'users',
   timestamps: true,
-  tableName: 'users'
+  modelName: 'User'
 })

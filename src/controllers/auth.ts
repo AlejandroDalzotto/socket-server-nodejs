@@ -60,7 +60,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     if (user === null) {
       const apiResponse: ApiResponse<null> = {
         data: null,
-        message: 'Email or password field is incorrect or missing',
+        message: 'User doesn\'t exists in database',
         status: 404,
         success: false
       }
@@ -70,7 +70,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Verify password
-    const userPassword = user.get('password') as string
+    const userPassword = user.get('password')
     const isValidPassword = bcryptjs.compareSync(password, userPassword)
     if (!isValidPassword) {
       const apiResponse: ApiResponse<null> = {
@@ -85,16 +85,18 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Generate JWT
-    const token = await generateJWT(user.get('id'))
+    const token = await generateJWT(user.get('uuid'))
+
+    // TODO: clear private user information.
 
     const apiResponse: ApiResponse<{ user: any, token: string }> = {
       data: {
         token,
         user
       },
-      message: 'Email or password field is incorrect or missing',
-      status: 400,
-      success: false
+      message: 'Valid credencials. Welcome sir!',
+      status: 200,
+      success: true
     }
 
     res.json(apiResponse)
