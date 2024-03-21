@@ -17,7 +17,8 @@ User.init({
   },
   username: {
     type: DataTypes.STRING({ length: 18 }),
-    allowNull: false
+    allowNull: false,
+    unique: true
   },
   email: {
     type: DataTypes.STRING({ length: 50 }),

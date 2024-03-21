@@ -111,3 +111,70 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json(apiResponse)
   }
 }
+
+export const update = async (req: Request, res: Response): Promise<void> => {
+  // Get new attributes
+  const { username, email, password }: {
+    username: string
+    email: string
+    password: string
+  } = req.body
+
+  const { username: usernameToChangeAttributes } = req.params
+
+  // Search if new values doesn't broke unique attributes in database
+  const existByEmail = await User.findOne({
+    where: {
+      email,
+      active: true
+    }
+  })
+
+  if (existByEmail !== null) {
+    throw new Error('400 bad request: email already registered')
+  }
+
+  const existByUsername = await User.findOne({
+    where: {
+      username,
+      active: true
+    }
+  })
+
+  if (existByUsername !== null) {
+    throw new Error('400 bad request: username it\'s already taken')
+  }
+
+  if (password !== null || password !== undefined || password !== '') {
+    // encrypt password to save it.
+    const passwordEncrypted = encryptPassword(password)
+
+    await User.update({ password: passwordEncrypted }, {
+      where: {
+        username: usernameToChangeAttributes,
+        active: true
+      }
+    })
+  }
+
+  const [affectedCount] = await User.update({ username, email }, {
+    where: {
+      username: usernameToChangeAttributes
+    }
+  })
+
+  // Return number of affected columns.
+  const apiResponse: ApiResponse<number> = {
+    data: affectedCount,
+    message: 'New data saved successfully',
+    status: 201,
+    success: true
+  }
+
+  res.status(201).json(apiResponse)
+}
+
+export const verifyAccount = async (_req: Request, _res: Response): Promise<void> => {
+
+  // Get
+}
